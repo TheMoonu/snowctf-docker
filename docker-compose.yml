@@ -1,23 +1,24 @@
-version: "3"
+version: "3.0"
 services:
 
   db:
     restart: always
     image: ${MYSQL_IMAGE}
-    container_name: izone_db
+    container_name: snow_db
     volumes:
       - ./db/mysql:/var/lib/mysql
       - ./db/my.cnf:/etc/my.cnf:ro
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${IZONE_MYSQL_NAME}
+      MYSQL_DATABASE: ${SNOW_MYSQL_NAME}
+      
     networks:
       - backend
 
   redis:
     restart: always
     image: ${REDIS_IMAGE}
-    container_name: izone_redis
+    container_name: snow_redis
     volumes:
       - ./redis/data:/data
     networks:
@@ -25,23 +26,23 @@ services:
 
   web:
     restart: always
-    image: ${IZONE_IMAGE}
-    container_name: izone_web
+    image: ${SNOW_IMAGE}
+    container_name: snow_web
     environment:
-      IZONE_MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      IZONE_MYSQL_HOST: db
-      IZONE_MYSQL_NAME: ${IZONE_MYSQL_NAME}
-      IZONE_MYSQL_USER: root
-      IZONE_MYSQL_PORT: 3306
-      IZONE_REDIS_HOST: redis
-      IZONE_REDIS_PORT: 6379
+      SNOW_MYSQL_PASSWORD: R4MmGnntRa4TY64s
+      SNOW_MYSQL_HOST: db
+      SNOW_MYSQL_NAME: ${SNOW_MYSQL_NAME}
+      SNOW_MYSQL_USER: root
+      SNOW_MYSQL_PORT: 3306
+      SNOW_REDIS_HOST: redis
+      SNOW_REDIS_PORT: 6379
     env_file:
-      - ./izone.env
+      - ./snow.env
     volumes:
-      - ./web/static:/opt/cloud/izone/static
-      - ./web/media:/opt/cloud/izone/media
-      - ./web/whoosh_index:/opt/cloud/izone/whoosh_index
-      - ./web/log:/opt/cloud/izone/log
+      - ./web/static:/opt/cloud/snowctf/static
+      - ./web/media:/opt/cloud/snowctf/media
+      - ./web/whoosh_index:/opt/cloud/snowctf/whoosh_index
+      - ./web/log:/opt/cloud/snowctf/log
     links:
       - db
       - redis
@@ -55,11 +56,11 @@ services:
   nginx:
     restart: always
     image: ${NGINX_IMAGE}
-    container_name: izone_nginx
+    container_name: snow_nginx
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./web/static:/usr/share/nginx/izone/static
-      - ./web/media:/usr/share/nginx/izone/media
+      - ./web/static:/usr/share/nginx/snowctf/static
+      - ./web/media:/usr/share/nginx/snowctf/media
     ports:
       - "${NGINX_PORT}:80"
     links:
@@ -69,6 +70,8 @@ services:
 
 networks:
   backend:
+    name: snow_backend  # 指定固定网络名
     driver: bridge
   frontend:
+    name: snow_frontend
     driver: bridge
