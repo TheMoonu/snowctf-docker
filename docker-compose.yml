@@ -39,6 +39,7 @@ services:
     env_file:
       - ./snow.env
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./web/static:/opt/cloud/snowctf/static
       - ./web/media:/opt/cloud/snowctf/media
       - ./web/whoosh_index:/opt/cloud/snowctf/whoosh_index
