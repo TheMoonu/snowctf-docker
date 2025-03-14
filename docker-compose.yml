@@ -29,7 +29,7 @@ services:
     image: ${SNOW_IMAGE}
     container_name: snow_web
     environment:
-      SNOW_MYSQL_PASSWORD: R4MmGnntRa4TY64s
+      SNOW_MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       SNOW_MYSQL_HOST: db
       SNOW_MYSQL_NAME: ${SNOW_MYSQL_NAME}
       SNOW_MYSQL_USER: root
